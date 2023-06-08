@@ -1,0 +1,157 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Это файл конфигурации для сервера etcd.
+
+# Читабельное имя для этого участника.
+name: 'default'
+
+# Путь к каталогу данных.
+data-dir:
+
+# Путь к выделенному каталогу wal.
+wal-dir:
+
+# Количество совершенных транзакций для создания моментального снимка на диск.
+snapshot-count: 10000
+
+# Время (в миллисекундах) интервала сердцебиения.
+heartbeat-interval: 100
+
+# Время (в миллисекундах) для выбора тайм-аута.
+election-timeout: 1000
+
+# Подавать сигналы тревоги, когда размер серверной части превышает заданную квоту. 0 заданная квота
+# стандартная квота.
+quota-backend-bytes: 0
+
+# Список URL-адресов, разделенных запятыми, для прослушивания однорангового трафика.
+listen-peer-urls: http://localhost:2380
+
+# Список URL-адресов, разделенных запятыми, для прослушивания клиентского трафика.
+listen-client-urls: http://localhost:2379
+
+# Максимальное количество сохраняемых файлов моментальных снимков (0 — не ограничено).
+max-snapshots: 5
+
+# Максимальное количество сохраняемых wal-файлов (0 — не ограничено).
+max-wals: 5
+
+# Разделенный запятыми белый список источников для CORS (совместное использование ресурсов между источниками).
+cors:
+
+# Список одноранговых URL-адресов этого члена для объявления остальной части кластера.
+# URL-адреса должны быть представлены в виде списка, разделенного запятыми.
+initial-advertise-peer-urls: http://localhost:2380
+
+# Список клиентских URL-адресов этого участника для публичной рекламы.
+# URL-адреса должны быть представлены в виде списка, разделенного запятыми.
+advertise-client-urls: http://localhost:2379
+
+# URL-адрес обнаружения, используемый для начальной загрузки кластера.
+discovery:
+
+# Допустимые значения включают «выход», «прокси».
+discovery-fallback: 'proxy'
+
+# Прокси-сервер HTTP, используемый для трафика в службу обнаружения.
+discovery-proxy:
+
+# Домен DNS, используемый для начальной загрузки начального кластера.
+discovery-srv:
+
+# Начальная конфигурация кластера для начальной загрузки.
+initial-cluster:
+
+# Начальный токен кластера для кластера etcd во время начальной загрузки.
+initial-cluster-token: 'etcd-cluster'
+
+# Исходное состояние кластера («новый» или «существующий»).
+initial-cluster-state: 'new'
+
+# Отклоняйте запросы на реконфигурацию, которые могут привести к потере кворума.
+strict-reconfig-check: false
+
+# Принимать запросы клиента etcd V2
+enable-v2: true
+
+# Включить профилирование данных во время выполнения через HTTP-сервер
+enable-pprof: true
+
+# Допустимые значения включают «включено», «только для чтения», «выключено».
+proxy: 'off'
+
+# Время (в миллисекундах), в течение которого конечная точка будет находиться в состоянии сбоя.
+proxy-failure-wait: 5000
+
+# Время (в миллисекундах) интервала обновления конечных точек.
+proxy-refresh-interval: 30000
+
+# Время (в миллисекундах) до истечения времени ожидания дозвона.
+proxy-dial-timeout: 1000
+
+# Время (в миллисекундах) для тайм-аута записи.
+proxy-write-timeout: 5000
+
+# Время (в миллисекундах) для чтения до тайм-аута.
+proxy-read-timeout: 0
+
+client-transport-security:
+  # Путь к файлу сертификата TLS клиентского сервера.
+  cert-file:
+
+  # Путь к файлу ключа TLS клиентского сервера.
+  key-file:
+
+  # Включите аутентификацию клиентского сертификата.
+  client-cert-auth: false
+
+  # Путь к файлу сертификата TLS доверенного CA клиентского сервера.
+  trusted-ca-file:
+
+  # Клиент TLS с использованием сгенерированных сертификатов
+  auto-tls: false
+
+peer-transport-security:
+  # Путь к файлу сертификата TLS однорангового сервера.
+  cert-file:
+
+  # Путь к файлу ключа TLS однорангового сервера.
+  key-file:
+
+  # Включите аутентификацию сертификата однорангового клиента.
+  client-cert-auth: false
+
+  # Одноранговый TLS с использованием сгенерированных сертификатов.
+  trusted-ca-file:
+
+  # Одноранговый TLS с использованием сгенерированных сертификатов.
+  auto-tls: false
+
+# Включите ведение журнала на уровне отладки для etcd.
+debug: false
+
+logger: zap
+
+# Укажите 'stdout' или 'stderr', чтобы пропустить ведение журнала journald даже при работе под systemd.
+log-outputs: [stderr]
+
+# Принудительно создать новый кластер с одним членом.
+force-new-cluster: false
+
+auto-compaction-mode: periodic
+auto-compaction-retention: "1"

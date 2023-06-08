@@ -1,0 +1,113 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+conf:
+  listen:
+    host: 0.0.0.0     # `менеджер api` прослушивающие IP или хостовое имя
+    port: 9000          # `менеджер api` прослушивающий порт
+  allow_list:           # Если мы не задали IP, то IP принимает стандартное значение.
+    - 0.0.0.0/0
+  etcd:
+    endpoints:          # Поддерживает определение нескольких адресов хостов etcd для кластера etcd
+      - "http://etcd:2379"
+                          # yamllint отлючить правило:comments-indentation
+                          # etcd базовая авторизационная информация
+    # логин: "root"    # игнорирует etcd логин если etcd не авторизован
+    # пароль: "123456"  # игнорирует etcd пароль если etcd не авторизован
+    mtls:
+      key_file: ""          # Путь вашего самоподписанного ключа на стороне клиента
+      cert_file: ""         # Путь к вашему самоподписанного сертификата на стороне клиента
+      ca_file: ""           # Путь к вашему самоподписанному сертификату CA, CA используется для подписи сертификатов вызывающих абонентов.
+    # prefix: /apisix     # apisix префикс конфигурации в etcd, /apisix by default
+  log:
+    error_log:
+      level: warn       # поддерживает уровни, от низшего к высшему: отладывающий, информационный, предупреждающий, ошибочный, панический, фатальный
+      file_path:
+        logs/error.log  # поддерживает относительный путь, абсолютный путь, стандартный вывод
+                        # такие как: logs/error.log, /tmp/logs/error.log, /dev/stdout, /dev/stderr
+    access_log:
+      file_path:
+        logs/access.log  # поддерживает относительный путь, абсолютный путь, стандартный вывод
+                         # такие как: logs/access.log, /tmp/logs/access.log, /dev/stdout, /dev/stderr
+                         # log пример: 2020-12-09T16:38:09.039+0800	INFO	filter/logging.go:46	/apisix/admin/routes/r1	{"status": 401, "host": "127.0.0.1:9000", "query": "asdfsafd=adf&a=a", "requestId": "3d50ecb8-758c-46d1-af5b-cd9d1c820156", "latency": 0, "remoteIP": "127.0.0.1", "method": "PUT", "errs": []}
+  security:
+      # access_control_allow_origin: "http://httpbin.org"
+      # access_control_allow_credentials: true          # поддержка с использованием пользовательской конфигурации cors
+      # access_control_allow_headers: "Авторизация"
+      # access_control-allow_methods: "*"
+      # x_frame_options: "deny"
+      content_security_policy: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src *"  # You can set frame-src to provide content for your grafana panel.
+
+authentication:
+  secret:
+    secret              # секрет для генерации токена jwt..
+                        # ПРИМЕЧАНИЕ. Настоятельно рекомендуется изменить это значение для защиты `менеджер api`.
+                        # если это значение стандартное, то `менеджер api` запускается, он сгенерирует случайную строку, чтобы заменить ее.
+  expire_time: 3600     # время истечения срока действия токена jwt, в секундах
+  users:                # yamllint запущенное правило:comments-indentation
+    - username: admin   # логин и пароль для логина `менеджера api`
+      password: admin
+    - username: user
+      password: user
+
+plugins:                          # список плагинов (сортировка в алфавитном порядке)
+  - api-breaker
+  - authz-keycloak
+  - basic-auth
+  - batch-requests
+  - consumer-restriction
+  - cors
+  # - dubbo-proxy
+  - echo
+  # - error-log-logger
+  # - example-plugin
+  - fault-injection
+  - grpc-transcode
+  - hmac-auth
+  - http-logger
+  - ip-restriction
+  - jwt-auth
+  - kafka-logger
+  - key-auth
+  - limit-conn
+  - limit-count
+  - limit-req
+  # - log-rotate
+  # - node-status
+  - openid-connect
+  - prometheus
+  - proxy-cache
+  - proxy-mirror
+  - proxy-rewrite
+  - redirect
+  - referer-restriction
+  - request-id
+  - request-validation
+  - response-rewrite
+  - serverless-post-function
+  - serverless-pre-function
+  # - skywalking
+  - sls-logger
+  - syslog
+  - tcp-logger
+  - udp-logger
+  - uri-blocker
+  - wolf-rbac
+  - zipkin
+  - server-info
+  - traffic-split
+  - elasticsearch-logger
